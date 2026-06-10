@@ -1,6 +1,7 @@
 import streamlit as st
 import re
 import unicodedata
+import streamlit.components.v1 as components
 
 # ─────────────────────────────────────────────
 # ページ設定（必ず先頭に）
@@ -324,172 +325,188 @@ def count_stats(original: str):
 # メイン UI
 # ─────────────────────────────────────────────
 
-# ヒーローヘッダー
-st.markdown(
-    """
-    <div class="hero-header">
-        <div class="hero-title">✏️ 名簿スペース一括成形ツール</div>
-        <div class="hero-sub">
-            全角・半角スペースを瞬時に変換 ─ コピペするだけで即完了
+ad_left, main_content, ad_right = st.columns([1, 5, 1])
+
+ADMAX_HTML = """
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/aff9f16b3aa8a8e05d3f177c95ce7c8f"></script>
+<!-- admax -->
+"""
+
+with ad_left:
+    components.html(ADMAX_HTML, height=250)
+
+with ad_right:
+    components.html(ADMAX_HTML, height=250)
+
+with main_content:
+    # ヒーローヘッダー
+    st.markdown(
+        """
+        <div class="hero-header">
+            <div class="hero-title">✏️ 名簿スペース一括成形ツール</div>
+            <div class="hero-sub">
+                全角・半角スペースを瞬時に変換 ─ コピペするだけで即完了
+            </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-# 2カラムレイアウト
-col_left, col_right = st.columns([1, 1], gap="large")
-
-# ─── 左カラム：入力 ────────────────────────────────────────────
-with col_left:
-
-    st.markdown(
-        '<p class="section-title">📋 名簿を貼り付け</p>',
+        """,
         unsafe_allow_html=True,
     )
 
-    input_text = st.text_area(
-        label="名簿入力",
-        placeholder=(
-            "ここに名簿をコピペしてください。\n"
-            "例：\n"
-            "山田　太郎\n"
-            "佐藤 花子\n"
-            "田中　 次郎"
-        ),
-        height=300,
-        key="input_roster",
-        label_visibility="collapsed",
-    )
+    # 2カラムレイアウト
+    col_left, col_right = st.columns([1, 1], gap="large")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(
-        '<p class="section-title">⚙️ 変換モードを選択</p>',
-        unsafe_allow_html=True,
-    )
+    # ─── 左カラム：入力 ────────────────────────────────────────────
+    with col_left:
 
-    MODE_OPTIONS = {
-        "半角スペース1つに統一（連続も圧縮）": "half",
-        "スペースをすべて削除": "delete",
-        "タブ区切りに変換（Excel 2列貼付用）": "tab",
-    }
+        st.markdown(
+            '<p class="section-title">📋 名簿を貼り付け</p>',
+            unsafe_allow_html=True,
+        )
 
-    selected_label = st.radio(
-        label="変換モード",
-        options=list(MODE_OPTIONS.keys()),
-        index=0,
-        key="mode_select",
-        label_visibility="collapsed",
-    )
-    selected_mode = MODE_OPTIONS[selected_label]
+        input_text = st.text_area(
+            label="名簿入力",
+            placeholder=(
+                "ここに名簿をコピペしてください。\n"
+                "例：\n"
+                "山田　太郎\n"
+                "佐藤 花子\n"
+                "田中　 次郎"
+            ),
+            height=300,
+            key="input_roster",
+            label_visibility="collapsed",
+        )
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    convert_btn = st.button("🚀 変換する", key="convert_btn")
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown(
+            '<p class="section-title">⚙️ 変換モードを選択</p>',
+            unsafe_allow_html=True,
+        )
 
-# ─── 右カラム：出力 ────────────────────────────────────────────
-with col_right:
+        MODE_OPTIONS = {
+            "半角スペース1つに統一（連続も圧縮）": "half",
+            "スペースをすべて削除": "delete",
+            "タブ区切りに変換（Excel 2列貼付用）": "tab",
+        }
 
-    st.markdown(
-        '<p class="section-title">✅ 変換結果</p>',
-        unsafe_allow_html=True,
-    )
+        selected_label = st.radio(
+            label="変換モード",
+            options=list(MODE_OPTIONS.keys()),
+            index=0,
+            key="mode_select",
+            label_visibility="collapsed",
+        )
+        selected_mode = MODE_OPTIONS[selected_label]
 
-    if convert_btn:
-        if not input_text.strip():
-            st.warning("⚠️ 名簿が入力されていません。左側にテキストを貼り付けてください。")
+        st.markdown("<br>", unsafe_allow_html=True)
+        convert_btn = st.button("🚀 変換する", key="convert_btn")
+
+    # ─── 右カラム：出力 ────────────────────────────────────────────
+    with col_right:
+
+        st.markdown(
+            '<p class="section-title">✅ 変換結果</p>',
+            unsafe_allow_html=True,
+        )
+
+        if convert_btn:
+            if not input_text.strip():
+                st.warning("⚠️ 名簿が入力されていません。左側にテキストを貼り付けてください。")
+            else:
+                result = normalize_spaces(input_text, selected_mode)
+                n_lines, n_half, n_zen = count_stats(input_text)
+
+                # 結果テキストエリア
+                st.text_area(
+                    label="変換結果",
+                    value=result,
+                    height=300,
+                    key="output_area",
+                    label_visibility="collapsed",
+                )
+
+                # 統計バッジ
+                st.markdown(
+                    f"""
+                    <div style="margin-bottom:0.8rem;">
+                        <span class="stat-badge">📄 {n_lines} 行</span>
+                        <span class="stat-badge">半角スペース {n_half} 個</span>
+                        <span class="stat-badge">全角スペース {n_zen} 個</span>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                # 成功バナー
+                st.markdown(
+                    f'<div class="success-banner">✓ 変換完了 ─ <strong>{selected_label}</strong> で処理しました</div>',
+                    unsafe_allow_html=True,
+                )
+
+                # コピーヒント
+                st.markdown(
+                    '<p class="hint-text">💡 テキストエリアをクリック → Ctrl+A → Ctrl+C でコピーできます</p>',
+                    unsafe_allow_html=True,
+                )
+
+                # タブモード時の補足
+                if selected_mode == "tab":
+                    st.markdown(
+                        '<p class="hint-excel">📊 <strong>Excel貼付け手順：</strong> A列を選択 → Ctrl+V で2列に展開されます</p>',
+                        unsafe_allow_html=True,
+                    )
+
         else:
-            result = normalize_spaces(input_text, selected_mode)
-            n_lines, n_half, n_zen = count_stats(input_text)
-
-            # 結果テキストエリア
-            st.text_area(
-                label="変換結果",
-                value=result,
-                height=300,
-                key="output_area",
-                label_visibility="collapsed",
-            )
-
-            # 統計バッジ
             st.markdown(
-                f"""
-                <div style="margin-bottom:0.8rem;">
-                    <span class="stat-badge">📄 {n_lines} 行</span>
-                    <span class="stat-badge">半角スペース {n_half} 個</span>
-                    <span class="stat-badge">全角スペース {n_zen} 個</span>
+                """
+                <div class="placeholder-center">
+                    <div class="icon">🎯</div>
+                    <div class="msg">左側に名簿を貼り付けて<br>「変換する」を押してください</div>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-            # 成功バナー
-            st.markdown(
-                f'<div class="success-banner">✓ 変換完了 ─ <strong>{selected_label}</strong> で処理しました</div>',
-                unsafe_allow_html=True,
-            )
+    # ─────────────────────────────────────────────
+    # 使い方セクション
+    # ─────────────────────────────────────────────
+    st.markdown("<hr>", unsafe_allow_html=True)
 
-            # コピーヒント
-            st.markdown(
-                '<p class="hint-text">💡 テキストエリアをクリック → Ctrl+A → Ctrl+C でコピーできます</p>',
-                unsafe_allow_html=True,
-            )
-
-            # タブモード時の補足
-            if selected_mode == "tab":
-                st.markdown(
-                    '<p class="hint-excel">📊 <strong>Excel貼付け手順：</strong> A列を選択 → Ctrl+V で2列に展開されます</p>',
-                    unsafe_allow_html=True,
-                )
-
-    else:
+    with st.expander("📖 使い方 / 変換モードの詳細"):
         st.markdown(
             """
-            <div class="placeholder-center">
-                <div class="icon">🎯</div>
-                <div class="msg">左側に名簿を貼り付けて<br>「変換する」を押してください</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
+            ### 変換モード一覧
+
+            | モード | 動作 | 用途 |
+            |--------|------|------|
+            | **半角スペース1つに統一** | 全角・半角スペースを半角1つに変換。連続するスペースも1つに圧縮 | 標準的な名簿整形、DBへの登録 |
+            | **スペースをすべて削除** | 全角・半角スペースを完全に削除 | 姓名を1文字列として扱いたい場合 |
+            | **タブ区切りに変換** | スペース（全角・半角・連続）をタブ1つに変換 | Excel に姓・名を別列で貼り付けたい場合 |
+
+            ### ゴミ文字の自動除去
+            変換前に以下の不正文字を自動的に除去します：
+            - **制御文字**（バックスペース・NUL・ESCなど）
+            - **ゼロ幅スペース**（U+200B など）
+            - **不可視Unicode文字**（BOM・方向制御文字など）
+
+            ### 操作手順
+            1. 名簿をコピー（Ctrl+C）
+            2. 左の入力欄に貼り付け（Ctrl+V）
+            3. 変換モードを選択
+            4. 「変換する」ボタンをクリック
+            5. 右の結果欄からコピー（Ctrl+A → Ctrl+C）
+
+            ### 対応スペース
+            - **全角スペース**（`　` U+3000）
+            - **半角スペース**（` ` U+0020）
+            - **連続スペース**（複数個）→ 1つに圧縮または1タブに変換
+            """
         )
 
-# ─────────────────────────────────────────────
-# 使い方セクション
-# ─────────────────────────────────────────────
-st.markdown("<hr>", unsafe_allow_html=True)
-
-with st.expander("📖 使い方 / 変換モードの詳細"):
+    # フッター
     st.markdown(
-        """
-        ### 変換モード一覧
-
-        | モード | 動作 | 用途 |
-        |--------|------|------|
-        | **半角スペース1つに統一** | 全角・半角スペースを半角1つに変換。連続するスペースも1つに圧縮 | 標準的な名簿整形、DBへの登録 |
-        | **スペースをすべて削除** | 全角・半角スペースを完全に削除 | 姓名を1文字列として扱いたい場合 |
-        | **タブ区切りに変換** | スペース（全角・半角・連続）をタブ1つに変換 | Excel に姓・名を別列で貼り付けたい場合 |
-
-        ### ゴミ文字の自動除去
-        変換前に以下の不正文字を自動的に除去します：
-        - **制御文字**（バックスペース・NUL・ESCなど）
-        - **ゼロ幅スペース**（U+200B など）
-        - **不可視Unicode文字**（BOM・方向制御文字など）
-
-        ### 操作手順
-        1. 名簿をコピー（Ctrl+C）
-        2. 左の入力欄に貼り付け（Ctrl+V）
-        3. 変換モードを選択
-        4. 「変換する」ボタンをクリック
-        5. 右の結果欄からコピー（Ctrl+A → Ctrl+C）
-
-        ### 対応スペース
-        - **全角スペース**（`　` U+3000）
-        - **半角スペース**（` ` U+0020）
-        - **連続スペース**（複数個）→ 1つに圧縮または1タブに変換
-        """
+        '<div class="footer">名簿スペース一括成形ツール ─ Powered by Streamlit</div>',
+        unsafe_allow_html=True,
     )
-
-# フッター
-st.markdown(
-    '<div class="footer">名簿スペース一括成形ツール ─ Powered by Streamlit</div>',
-    unsafe_allow_html=True,
-)
