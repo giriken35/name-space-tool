@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 # ページ設定（必ず先頭に）
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="名簿スペース一括成形ツール",
+    page_title="【登録不要】エクセル名簿スペース一括削除・苗字と名前の2列分割ツール | 無料Web便利ツール集",
     page_icon="✏️",
     layout="wide",
 )
@@ -533,6 +533,18 @@ with main_content:
             - **連続スペース**（複数個）→ 1つに圧縮または1タブに変換
             """
         )
+
+    # SEO メタ情報
+    st.markdown(
+        """
+        <div style="margin-top: 3rem; padding: 1rem; border-top: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); font-size: 0.75rem; line-height: 1.6;">
+            ■ このツールについて（SEOメタ情報）<br>
+            【対応キーワード】エクセル スペース 削除 / 名簿 半角全角 統一 / 苗字 名前 分割 コピペ / Excel 空白 一括消去 / スプレッドシート 文字列整形 無料<br>
+            【説明】会員登録不要・完全無料で使えるWeb便利ツールです。Excelやスプレッドシートからコピペした名簿データの全角・半角スペースのバラつきを一瞬で整形します。スペースを1つに統一、すべて削除、またはExcelで2列に自動で分かれるタブ区切り変換に対応。事務作業やデータ入力の効率化に最適です。
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     # フッター
     st.markdown(
