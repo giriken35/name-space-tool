@@ -328,30 +328,10 @@ def count_stats(original: str):
 ad_left, main_content, ad_right = st.columns([1, 5, 1])
 
 ADMAX_HTML = """
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: transparent;
-    }
-    .ad-card {
-        background: rgba(30, 41, 59, 0.6);
-        border: 1px solid rgba(167, 139, 250, 0.25);
-        border-radius: 12px;
-        padding: 10px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-    }
-</style>
-<div class="ad-card">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <!-- admax -->
-    <script src="https://adm.shinobi.jp/s/aff9f16b3aa8a8e05d3f177c95ce7c8f"></script>
-    <!-- admax -->
-</div>
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/aff9f16b3aa8a8e05d3f177c95ce7c8f"></script>
+<!-- admax -->
 """
 
 AD_SPACER_AND_LABEL = """
@@ -374,11 +354,11 @@ AD_SPACER_AND_LABEL = """
 
 with ad_left:
     st.markdown(AD_SPACER_AND_LABEL, unsafe_allow_html=True)
-    components.html(ADMAX_HTML, height=270)
+    components.html(ADMAX_HTML, height=250)
 
 with ad_right:
     st.markdown(AD_SPACER_AND_LABEL, unsafe_allow_html=True)
-    components.html(ADMAX_HTML, height=270)
+    components.html(ADMAX_HTML, height=250)
 
 with main_content:
     # ヒーローヘッダー
