@@ -97,8 +97,8 @@ st.markdown(
 
     /* セクション見出し */
     .section-title {
-        font-size: 1.1rem;
-        font-weight: 700;
+        font-size: 2.2rem;
+        font-weight: 800;
         color: #a78bfa !important;
         letter-spacing: 0.04em;
         margin-bottom: 0.6rem;
