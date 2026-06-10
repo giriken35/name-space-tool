@@ -328,10 +328,19 @@ def count_stats(original: str):
 ad_left, main_content, ad_right = st.columns([1, 5, 1])
 
 ADMAX_HTML = """
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-<!-- admax -->
-<script src="https://adm.shinobi.jp/s/aff9f16b3aa8a8e05d3f177c95ce7c8f"></script>
-<!-- admax -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <base target="_blank">
+</head>
+<body style="margin: 0; padding: 0; background: transparent; display: flex; justify-content: center; align-items: center;">
+    <!-- admax -->
+    <script src="https://adm.shinobi.jp/s/aff9f16b3aa8a8e05d3f177c95ce7c8f"></script>
+    <!-- admax -->
+</body>
+</html>
 """
 
 AD_SPACER_AND_LABEL = """
