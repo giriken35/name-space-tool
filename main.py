@@ -401,6 +401,15 @@ with col_right:
             result = normalize_spaces(input_text, selected_mode)
             n_lines, n_half, n_zen = count_stats(input_text)
 
+            # 結果テキストエリア
+            st.text_area(
+                label="変換結果",
+                value=result,
+                height=260,
+                key="output_area",
+                label_visibility="collapsed",
+            )
+
             # 統計バッジ
             st.markdown(
                 f"""
@@ -417,15 +426,6 @@ with col_right:
             st.markdown(
                 f'<div class="success-banner">✓ 変換完了 ─ <strong>{selected_label}</strong> で処理しました</div>',
                 unsafe_allow_html=True,
-            )
-
-            # 結果テキストエリア
-            st.text_area(
-                label="変換結果",
-                value=result,
-                height=260,
-                key="output_area",
-                label_visibility="collapsed",
             )
 
             # コピーヒント
