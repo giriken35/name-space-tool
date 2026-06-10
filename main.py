@@ -95,16 +95,6 @@ st.markdown(
         font-weight: 400;
     }
 
-    /* セクション見出し */
-    .section-title {
-        font-size: 2.2rem;
-        font-weight: 800;
-        color: #a78bfa !important;
-        letter-spacing: 0.04em;
-        margin-bottom: 0.6rem;
-        padding-bottom: 0.4rem;
-        border-bottom: 1px solid rgba(167,139,250,0.3);
-    }
 
     /* テキストエリア */
     textarea {
@@ -227,6 +217,27 @@ st.markdown(
 
     /* empty element（空divなど）を非表示 */
     .element-container:empty { display: none !important; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ─────────────────────────────────────────────
+# 見出し（ラベル）専用の CSS 定義
+# ─────────────────────────────────────────────
+st.markdown(
+    """
+    <style>
+    .section-title {
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        color: #a78bfa !important;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.6rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid rgba(167,139,250,0.3);
+        display: block;
+    }
     </style>
     """,
     unsafe_allow_html=True,
