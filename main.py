@@ -1,5 +1,6 @@
 import streamlit as st
 import re
+import unicodedata
 
 # ─────────────────────────────────────────────
 # ページ設定（必ず先頭に）
@@ -29,11 +30,54 @@ st.markdown(
         min-height: 100vh;
     }
 
+    /* ─── 全テキストを白系に強制 ─── */
+    .stApp p,
+    .stApp span,
+    .stApp label,
+    .stApp div,
+    .stApp li,
+    .stApp h1, .stApp h2, .stApp h3, .stApp h4,
+    .stMarkdown p,
+    .stMarkdown li,
+    .stMarkdown td,
+    .stMarkdown th {
+        color: #f1f5f9 !important;
+    }
+
+    /* radio / checkbox ラベル */
+    div[data-testid="stRadio"] label,
+    div[data-testid="stRadio"] label p,
+    div[data-testid="stCheckbox"] label {
+        color: #f1f5f9 !important;
+        font-size: 1rem !important;
+    }
+
+    /* radio 選択済マーカー */
+    div[data-testid="stRadio"] [data-testid="stMarkdownContainer"] p {
+        color: #f1f5f9 !important;
+    }
+
+    /* expander ラベル */
+    details summary p,
+    div[data-testid="stExpander"] summary span {
+        color: #e2e8f0 !important;
+        font-size: 1rem !important;
+    }
+
+    /* テーブルヘッダー */
+    .stMarkdown table th {
+        background: rgba(167,139,250,0.2);
+        color: #f1f5f9 !important;
+    }
+    .stMarkdown table td {
+        color: #e2e8f0 !important;
+    }
+
     /* ヘッダー */
     .hero-header {
         text-align: center;
         padding: 2.5rem 1rem 1.5rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
     }
     .hero-title {
         font-size: 2.8rem;
@@ -47,45 +91,34 @@ st.markdown(
     }
     .hero-sub {
         font-size: 1.05rem;
-        color: #94a3b8;
+        color: #cbd5e1 !important;
         font-weight: 400;
     }
 
-    /* カード */
-    .glass-card {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 16px;
-        padding: 1.6rem 1.8rem;
-        backdrop-filter: blur(12px);
-        margin-bottom: 1.2rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-    .card-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        color: #a78bfa;
-        text-transform: uppercase;
+    /* セクション見出し */
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #a78bfa !important;
+        letter-spacing: 0.04em;
         margin-bottom: 0.6rem;
-    }
-
-    /* ラジオボタン */
-    div[data-testid="stRadio"] label {
-        color: #e2e8f0 !important;
-        font-size: 1rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid rgba(167,139,250,0.3);
     }
 
     /* テキストエリア */
     textarea {
-        background: rgba(15,12,41,0.7) !important;
-        border: 1px solid rgba(167,139,250,0.3) !important;
+        background: rgba(15,12,41,0.8) !important;
+        border: 1px solid rgba(167,139,250,0.4) !important;
         border-radius: 10px !important;
-        color: #e2e8f0 !important;
+        color: #f1f5f9 !important;
         font-family: 'Noto Sans JP', monospace !important;
         font-size: 0.95rem !important;
         line-height: 1.7 !important;
         resize: vertical;
+    }
+    textarea::placeholder {
+        color: #64748b !important;
     }
     textarea:focus {
         border-color: rgba(167,139,250,0.8) !important;
@@ -94,23 +127,23 @@ st.markdown(
 
     /* ボタン */
     div[data-testid="stButton"] > button {
-        background: linear-gradient(90deg, #7c3aed, #2563eb);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        padding: 0.6rem 2.2rem;
+        background: linear-gradient(90deg, #7c3aed, #2563eb) !important;
+        color: #fff !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-size: 1.05rem !important;
+        font-weight: 600 !important;
+        padding: 0.65rem 2.2rem !important;
         cursor: pointer;
         transition: all 0.25s ease;
-        box-shadow: 0 4px 15px rgba(124,58,237,0.35);
+        box-shadow: 0 4px 15px rgba(124,58,237,0.35) !important;
         width: 100%;
         letter-spacing: 0.04em;
     }
     div[data-testid="stButton"] > button:hover {
-        background: linear-gradient(90deg, #6d28d9, #1d4ed8);
+        background: linear-gradient(90deg, #6d28d9, #1d4ed8) !important;
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(124,58,237,0.5);
+        box-shadow: 0 8px 24px rgba(124,58,237,0.5) !important;
     }
     div[data-testid="stButton"] > button:active {
         transform: translateY(0px);
@@ -122,23 +155,23 @@ st.markdown(
         border: 1px solid rgba(52,211,153,0.4);
         border-radius: 10px;
         padding: 0.8rem 1.2rem;
-        color: #6ee7b7;
+        color: #86efac !important;
         font-size: 0.95rem;
         margin-bottom: 0.8rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
+    }
+    .success-banner strong {
+        color: #86efac !important;
     }
 
     /* 統計バッジ */
     .stat-badge {
         display: inline-block;
-        background: rgba(167,139,250,0.15);
-        border: 1px solid rgba(167,139,250,0.3);
+        background: rgba(167,139,250,0.18);
+        border: 1px solid rgba(167,139,250,0.35);
         border-radius: 20px;
         padding: 0.25rem 0.9rem;
         font-size: 0.82rem;
-        color: #c4b5fd;
+        color: #ddd6fe !important;
         margin-right: 0.5rem;
         margin-top: 0.3rem;
     }
@@ -146,20 +179,54 @@ st.markdown(
     /* セパレータ */
     hr {
         border: none;
-        border-top: 1px solid rgba(255,255,255,0.08);
+        border-top: 1px solid rgba(255,255,255,0.1);
         margin: 1.5rem 0;
     }
 
     /* フッター */
     .footer {
         text-align: center;
-        color: #475569;
+        color: #64748b !important;
         font-size: 0.8rem;
         padding: 2rem 0 1rem;
     }
 
+    /* hint テキスト */
+    .hint-text {
+        color: #94a3b8 !important;
+        font-size: 0.83rem;
+        margin-top: 0.4rem;
+    }
+    .hint-excel {
+        color: #7dd3fc !important;
+        font-size: 0.85rem;
+    }
+
+    /* placeholder 中央揃え */
+    .placeholder-center {
+        text-align: center;
+        padding: 4rem 0;
+        color: #475569 !important;
+    }
+    .placeholder-center .icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .placeholder-center .msg {
+        font-size: 1rem;
+        color: #64748b !important;
+    }
+
+    /* warning / alert 内テキスト */
+    div[data-testid="stAlert"] p {
+        color: #1e293b !important;
+    }
+
     /* Streamlit デフォルト要素を隠す */
     #MainMenu, footer, header { visibility: hidden; }
+
+    /* empty element（空divなど）を非表示 */
+    .element-container:empty { display: none !important; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -172,27 +239,61 @@ st.markdown(
 ZENKAKU_SPACE = "\u3000"
 HANKAKU_SPACE = " "
 
+
+def clean_text(text: str) -> str:
+    """
+    目に見えない制御文字・ゴミ文字を除去する。
+    除去対象：
+      - C0制御文字（\x00-\x08, \x0b, \x0c, \x0e-\x1f）※改行\x0a・タブ\x09は保持
+      - C1制御文字（\x7f-\x9f）
+      - Unicode「Cc」カテゴリ（制御文字）
+      - バックスペース（\x08）
+      - ゼロ幅文字（U+200B, U+200C, U+200D, U+FEFF, U+2028, U+2029 等）
+      - 不正なサロゲートペア
+    """
+    # ゼロ幅・不可視文字・制御文字を除去（改行 \n とタブ \t は維持）
+    cleaned = re.sub(
+        r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f'
+        r'\u200b\u200c\u200d\u200e\u200f'
+        r'\u2028\u2029\u202a-\u202e'
+        r'\u2060-\u2064\uFEFF\uFFF9-\uFFFB]',
+        '',
+        text
+    )
+    # unicodedata で Cc カテゴリ（制御文字）を念のため追加除去
+    result = []
+    for ch in cleaned:
+        cat = unicodedata.category(ch)
+        if cat == 'Cc' and ch not in ('\n', '\t', '\r'):
+            continue  # 制御文字をスキップ
+        result.append(ch)
+    return ''.join(result)
+
+
 def normalize_spaces(text: str, mode: str) -> str:
     """
+    ゴミ文字除去 → スペース変換を実施。
     mode:
       'half'   → 全角・半角スペースを半角1つに統一（連続も1つに圧縮）
       'delete' → 全角・半角スペースをすべて削除
       'tab'    → 全角・半角スペースをタブ区切りに変換（Excel2列貼付用）
     """
+    # まずゴミ文字を除去
+    text = clean_text(text)
+
     lines = text.splitlines()
     result_lines = []
 
     for line in lines:
         if mode == "half":
-            # 全角スペースを半角に置換し、連続する半角スペースを1つに
             converted = line.replace(ZENKAKU_SPACE, HANKAKU_SPACE)
-            converted = re.sub(r" +", " ", converted).strip()
+            converted = re.sub(r"[ \t]+", " ", converted).strip()
         elif mode == "delete":
             converted = line.replace(ZENKAKU_SPACE, "").replace(HANKAKU_SPACE, "")
+            converted = re.sub(r"\t", "", converted)
         elif mode == "tab":
-            # 全角スペースも半角に統一してからタブに変換（連続スペースは1タブ）
             converted = line.replace(ZENKAKU_SPACE, HANKAKU_SPACE)
-            converted = re.sub(r" +", "\t", converted).strip()
+            converted = re.sub(r"[ \t]+", "\t", converted).strip()
         else:
             converted = line
         result_lines.append(converted)
@@ -200,13 +301,12 @@ def normalize_spaces(text: str, mode: str) -> str:
     return "\n".join(result_lines)
 
 
-def count_stats(original: str, converted: str):
-    """変換前後の統計を返す"""
+def count_stats(original: str):
+    """入力テキストの統計を返す"""
     orig_lines = [l for l in original.splitlines() if l.strip()]
-    conv_lines = [l for l in converted.splitlines() if l.strip()]
     orig_half = original.count(HANKAKU_SPACE)
     orig_zen = original.count(ZENKAKU_SPACE)
-    return len(orig_lines), orig_half, orig_zen, len(conv_lines)
+    return len(orig_lines), orig_half, orig_zen
 
 
 # ─────────────────────────────────────────────
@@ -229,13 +329,16 @@ st.markdown(
 # 2カラムレイアウト
 col_left, col_right = st.columns([1, 1], gap="large")
 
-# ─── 左カラム：入力 ───────────────────────────
+# ─── 左カラム：入力 ────────────────────────────────────────────
 with col_left:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<div class="card-label">📋 名簿を貼り付け</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<p class="section-title">📋 名簿を貼り付け</p>',
+        unsafe_allow_html=True,
+    )
 
     input_text = st.text_area(
-        label="",
+        label="名簿入力",
         placeholder=(
             "ここに名簿をコピペしてください。\n"
             "例：\n"
@@ -243,15 +346,16 @@ with col_left:
             "佐藤 花子\n"
             "田中　 次郎"
         ),
-        height=320,
+        height=300,
         key="input_roster",
         label_visibility="collapsed",
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
-    # 変換モード選択
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<div class="card-label">⚙️ 変換モードを選択</div>', unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown(
+        '<p class="section-title">⚙️ 変換モードを選択</p>',
+        unsafe_allow_html=True,
+    )
 
     MODE_OPTIONS = {
         "半角スペース1つに統一（連続も圧縮）": "half",
@@ -260,28 +364,31 @@ with col_left:
     }
 
     selected_label = st.radio(
-        label="",
+        label="変換モード",
         options=list(MODE_OPTIONS.keys()),
         index=0,
         key="mode_select",
         label_visibility="collapsed",
     )
     selected_mode = MODE_OPTIONS[selected_label]
-    st.markdown("</div>", unsafe_allow_html=True)
 
+    st.markdown("<br>", unsafe_allow_html=True)
     convert_btn = st.button("🚀 変換する", key="convert_btn")
 
-# ─── 右カラム：出力 ───────────────────────────
+# ─── 右カラム：出力 ────────────────────────────────────────────
 with col_right:
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<div class="card-label">✅ 変換結果</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<p class="section-title">✅ 変換結果</p>',
+        unsafe_allow_html=True,
+    )
 
     if convert_btn:
         if not input_text.strip():
             st.warning("⚠️ 名簿が入力されていません。左側にテキストを貼り付けてください。")
         else:
             result = normalize_spaces(input_text, selected_mode)
-            n_lines, n_half, n_zen, n_out = count_stats(input_text, result)
+            n_lines, n_half, n_zen = count_stats(input_text)
 
             # 統計バッジ
             st.markdown(
@@ -303,7 +410,7 @@ with col_right:
 
             # 結果テキストエリア
             st.text_area(
-                label="",
+                label="変換結果",
                 value=result,
                 height=260,
                 key="output_area",
@@ -312,31 +419,27 @@ with col_right:
 
             # コピーヒント
             st.markdown(
-                "<p style='color:#64748b; font-size:0.82rem; margin-top:0.4rem;'>"
-                "💡 テキストエリアをクリック → Ctrl+A → Ctrl+C でコピーできます</p>",
+                '<p class="hint-text">💡 テキストエリアをクリック → Ctrl+A → Ctrl+C でコピーできます</p>',
                 unsafe_allow_html=True,
             )
 
             # タブモード時の補足
             if selected_mode == "tab":
                 st.markdown(
-                    "<p style='color:#7dd3fc; font-size:0.85rem;'>"
-                    "📊 <strong>Excel貼付け手順：</strong> A列を選択 → Ctrl+V で2列に展開されます</p>",
+                    '<p class="hint-excel">📊 <strong>Excel貼付け手順：</strong> A列を選択 → Ctrl+V で2列に展開されます</p>',
                     unsafe_allow_html=True,
                 )
 
     else:
         st.markdown(
             """
-            <div style="text-align:center; padding: 5rem 0; color:#334155;">
-                <div style="font-size:3rem; margin-bottom:1rem;">🎯</div>
-                <div style="font-size:1rem;">左側に名簿を貼り付けて<br>「変換する」を押してください</div>
+            <div class="placeholder-center">
+                <div class="icon">🎯</div>
+                <div class="msg">左側に名簿を貼り付けて<br>「変換する」を押してください</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
-    st.markdown("</div>", unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
 # 使い方セクション
@@ -350,9 +453,15 @@ with st.expander("📖 使い方 / 変換モードの詳細"):
 
         | モード | 動作 | 用途 |
         |--------|------|------|
-        | **半角スペース1つに統一** | 全角・半角スペースをすべて半角1つに変換し、連続するスペースも1つに圧縮 | 標準的な名簿整形、DBへの登録 |
+        | **半角スペース1つに統一** | 全角・半角スペースを半角1つに変換。連続するスペースも1つに圧縮 | 標準的な名簿整形、DBへの登録 |
         | **スペースをすべて削除** | 全角・半角スペースを完全に削除 | 姓名を1文字列として扱いたい場合 |
         | **タブ区切りに変換** | スペース（全角・半角・連続）をタブ1つに変換 | Excel に姓・名を別列で貼り付けたい場合 |
+
+        ### ゴミ文字の自動除去
+        変換前に以下の不正文字を自動的に除去します：
+        - **制御文字**（バックスペース・NUL・ESCなど）
+        - **ゼロ幅スペース**（U+200B など）
+        - **不可視Unicode文字**（BOM・方向制御文字など）
 
         ### 操作手順
         1. 名簿をコピー（Ctrl+C）
