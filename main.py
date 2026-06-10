@@ -405,7 +405,7 @@ with col_right:
             st.text_area(
                 label="変換結果",
                 value=result,
-                height=260,
+                height=300,
                 key="output_area",
                 label_visibility="collapsed",
             )
